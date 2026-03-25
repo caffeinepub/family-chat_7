@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.75rem;
+
+    /* Warm cream background */
+    --background: 0.95 0.025 75;
+    --foreground: 0.22 0.045 213;
+
+    /* Cards: white */
+    --card: 1 0 0;
+    --card-foreground: 0.22 0.045 213;
+
+    --popover: 1 0 0;
+    --popover-foreground: 0.22 0.045 213;
+
+    /* Primary: deep teal */
+    --primary: 0.22 0.05 213;
+    --primary-foreground: 0.97 0.01 80;
+
+    /* Secondary: off-white */
+    --secondary: 0.95 0.02 75;
+    --secondary-foreground: 0.22 0.045 213;
+
+    --muted: 0.93 0.02 75;
+    --muted-foreground: 0.45 0.03 213;
+
+    /* Accent: coral */
+    --accent: 0.65 0.115 28;
+    --accent-foreground: 1 0 0;
+
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 0.985 0 0;
+
+    --border: 0.88 0.03 75;
+    --input: 0.88 0.03 75;
+    --ring: 0.65 0.115 28;
+
+    --chart-1: 0.646 0.222 41.116;
+    --chart-2: 0.6 0.118 184.704;
+    --chart-3: 0.398 0.07 227.392;
+    --chart-4: 0.828 0.189 84.429;
+    --chart-5: 0.769 0.188 70.08;
+
+    --sidebar: 0.22 0.05 213;
+    --sidebar-foreground: 0.97 0.01 80;
+    --sidebar-primary: 0.65 0.115 28;
+    --sidebar-primary-foreground: 1 0 0;
+    --sidebar-accent: 0.28 0.05 213;
+    --sidebar-accent-foreground: 0.97 0.01 80;
+    --sidebar-border: 0.3 0.04 213;
+    --sidebar-ring: 0.65 0.115 28;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+}
