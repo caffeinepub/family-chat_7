@@ -71,6 +71,7 @@ export interface backendInterface {
   assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
   isCallerAdmin(): Promise<boolean>;
   setMemberName(name: string): Promise<void>;
+  getCallerMemberInfo(): Promise<MemberInfo | null>;
   getMemberCount(): Promise<MemberCount>;
   getMembers(): Promise<MemberInfo[]>;
   postMessage(text: string): Promise<void>;

@@ -6,24 +6,28 @@ import MainApp from "./components/MainApp";
 import RegistrationForm from "./components/RegistrationForm";
 import { useActor } from "./hooks/useActor";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
-import { useCallerRole } from "./hooks/useQueries";
+import { useCallerMemberInfo, useCallerRole } from "./hooks/useQueries";
 
 export default function App() {
   const { identity, login, isLoggingIn, isInitializing } =
     useInternetIdentity();
   const { isFetching: actorLoading } = useActor();
   const { data: role, isLoading: roleLoading } = useCallerRole();
+  const { data: memberInfo, isLoading: memberInfoLoading } =
+    useCallerMemberInfo();
   const queryClient = useQueryClient();
 
   const isLoggedIn = !!identity;
 
   const handleRegistered = () => {
     queryClient.invalidateQueries({ queryKey: ["callerRole"] });
+    queryClient.invalidateQueries({ queryKey: ["callerMemberInfo"] });
   };
 
   // Full-screen loader while checking auth state
   const isCheckingAuth =
-    isInitializing || (isLoggedIn && (actorLoading || roleLoading));
+    isInitializing ||
+    (isLoggedIn && (actorLoading || roleLoading || memberInfoLoading));
 
   if (isCheckingAuth) {
     return (
@@ -57,7 +61,12 @@ export default function App() {
     );
   }
 
-  if (role === "unregistered" || role === "guest") {
+  // Show registration if user hasn't set their name yet
+  // (role check covers unregistered/guest as fallback)
+  const needsRegistration =
+    role === "unregistered" || role === "guest" || memberInfo === null;
+
+  if (needsRegistration) {
     return (
       <>
         <RegistrationForm onRegistered={handleRegistered} />

@@ -114,6 +114,10 @@ actor {
     memberNames.add(caller, info);
   };
 
+  public query ({ caller }) func getCallerMemberInfo() : async ?MemberInfo {
+    memberNames.get(caller);
+  };
+
   public query (_) func getMemberCount() : async { current : Nat; max : Nat } {
     { current = registeredCount; max = MAX_MEMBERS };
   };

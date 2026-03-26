@@ -28,9 +28,37 @@ export function useCallerRole() {
       if (!actor) return "unregistered";
       try {
         const role = await (actor as any).getCallerUserRole();
-        return role.__kind__ as "admin" | "user" | "guest";
+        // Candid variants come as { user: null }, { admin: null }, or { guest: null }
+        // Some SDK versions wrap them as { __kind__: "user" } etc.
+        if (role.__kind__) return role.__kind__ as "admin" | "user" | "guest";
+        if ("admin" in role) return "admin";
+        if ("user" in role) return "user";
+        if ("guest" in role) return "guest";
+        return "unregistered";
       } catch {
         return "unregistered";
+      }
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useCallerMemberInfo() {
+  const { actor, isFetching } = useActor();
+  return useQuery<MemberInfo | null>({
+    queryKey: ["callerMemberInfo"],
+    queryFn: async () => {
+      if (!actor) return null;
+      try {
+        // Returns ?MemberInfo - either null or a MemberInfo object
+        // Candid opt T comes as [] (none) or [value] (some)
+        const result = await (actor as any).getCallerMemberInfo();
+        if (Array.isArray(result)) {
+          return result.length > 0 ? result[0] : null;
+        }
+        return result ?? null;
+      } catch {
+        return null;
       }
     },
     enabled: !!actor && !isFetching,
@@ -114,6 +142,7 @@ export function useSetMemberName() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["callerRole"] });
+      queryClient.invalidateQueries({ queryKey: ["callerMemberInfo"] });
       queryClient.invalidateQueries({ queryKey: ["members"] });
       queryClient.invalidateQueries({ queryKey: ["memberCount"] });
     },
